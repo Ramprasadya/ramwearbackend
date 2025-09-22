@@ -34,7 +34,7 @@ const addProduct = async (req, res) => {
       date: Date.now()
     }
 
-    console.log(productData);
+    // console.log(productData);
 
     const product = new productModel(productData)
     await product.save();
@@ -73,7 +73,15 @@ const removeProduct = async (req, res) => {
 
 // single product info
 const singleProduct = async (req, res) => {
+  const { productId } = req.body
 
+  try {
+    const product = await productModel.findById(productId);
+    res.json({ success: true, product })
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message })
+  }
 }
 
 export { addProduct, listProduct, removeProduct, singleProduct }

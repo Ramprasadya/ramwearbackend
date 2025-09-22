@@ -5,6 +5,7 @@ import 'dotenv/config'
 import connectDB from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoute.js'
+import productRouter from './routes/productRoute.js'
 const port = process.env.PORT 
 connectDB()
 connectCloudinary()
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/user",userRouter)
+app.use("/product",productRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)

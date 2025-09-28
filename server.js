@@ -6,6 +6,7 @@ import connectDB from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoute.js'
 import productRouter from './routes/productRoute.js'
+import cartRouter from './routes/cartRoutes.js'
 const port = process.env.PORT 
 connectDB()
 connectCloudinary()
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 
 app.use("/user",userRouter)
 app.use("/product",productRouter)
+app.use("/cart", cartRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)

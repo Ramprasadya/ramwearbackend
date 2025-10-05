@@ -6,8 +6,9 @@ import userModel from "../models/userModel.js";
 
 const addToCart = async (req, res) => {
     try {
-        const { userId, itemId, size } = req.body;
-        const userData = await userModel.findById({ userId })
+        const userId = req.userId;
+        const {itemId, size } = req.body;
+        const userData = await userModel.findById(userId)
         const cartData = await userData.cartData;
 
         if (cartData[itemId]) {
@@ -20,7 +21,7 @@ const addToCart = async (req, res) => {
             cartData[itemId] = {}
             cartData[itemId][size] = 1
         }
-        await userModel.findByIdAndUpdate(userId, (cartData))
+        await userModel.findByIdAndUpdate(userId, {cartData})
         res.json({ success: true, message: "Added to Cart" })
     } catch (error) {
         console.log(error);

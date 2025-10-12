@@ -30,6 +30,18 @@ const LoginUser=async(req,res)=>{
 
 }
 
+const UserDetail=async(req,res)=>{
+   try {
+      const userId = req.userId
+      const user = await userModel.findById(userId)
+      // console.log(user)
+      res.json({success:true, user})
+   } catch (error) {
+       console.log(error);
+      res.json({success:false, message:error.message})
+   }
+}
+
 // Route for user registration
 const RegisterUser=async(req,res)=>{
    try {
@@ -89,4 +101,4 @@ const AdminLogin=async(req,res)=>{
 
 
 
-export {LoginUser,RegisterUser,AdminLogin}
+export {LoginUser,RegisterUser,AdminLogin, UserDetail}

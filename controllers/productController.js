@@ -6,8 +6,7 @@ import productModel from '../models/productModel.js';
 const addProduct = async (req, res) => {
   try {
     const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
-    
-    
+  
     const image1 = req.files.image1 && req.files.image1[0]
     const image2 = req.files.image2 && req.files.image2[0]
     const image3 = req.files.image3 && req.files.image3[0]
@@ -18,7 +17,7 @@ const addProduct = async (req, res) => {
     const images = [image1, image2, image3, image4].filter((item) => item !== undefined)
     let imagesUrl = await Promise.all(
       images.map(async (item) => {
-        let result = await cloudinary.uploader.upload(item.path, { resource_type: "image" })
+        let result = await cloudinary.uploader.upload(item.path, { resource_type: "image",folder:"ecommerce" })
         return result.secure_url;
       })
     )
@@ -65,6 +64,19 @@ const listProduct = async (req, res) => {
 // removing product
 const removeProduct = async (req, res) => {
   try {
+    const product = await productModel.findById(req.body.id)
+
+    // console.log(product.image)
+    for(let i=0;i<product.image.length;i++){
+      const url = product.image[i]
+      const imageUrl  = url.split('/')
+      const ImageName = imageUrl[imageUrl.length-1]
+      const  name = ImageName.split('.')[0]
+      // console.log(name)
+      cloudinary.uploader.destroy(`ecommerce/${name}`, (result,error)=>{
+        console.log(result,error)
+      })
+    }
     await productModel.findByIdAndDelete(req.body.id)
     res.json({ success: true, message: "Product Removed" })
   } catch (error) {
@@ -72,6 +84,7 @@ const removeProduct = async (req, res) => {
     res.json({ success: false, message: error.message })
   }
 }
+
 
 // single product info
 const singleProduct = async (req, res) => {
